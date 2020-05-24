@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="0" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+  <style>
+
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width: 100px;
+    }
+
+  </style>
+
+  <script>
+
+    let image = document.querySelector('img');
+
+    //set image border
+    image.style.borderStyle = "solid";
+
+   let borderId = document.getElementById('spacing');
+    let blurId = document.getElementById('blur');
+    let colorId = document.getElementById('base'); 
+
+    let dataSizing = borderId.getAttribute("data-sizing");
+
+    let jsHl = document.querySelector(".hl");
+    jsHl.style.color = colorId.value;
+    image.style.borderColor = colorId.value;
+
+    
+     borderId.addEventListener('input', function(e) {
+     let value = borderId.value;
+     image.style.borderWidth = `${value}${dataSizing}`;
+     }, false); 
+
+     blurId.addEventListener('input', function(e) {
+      let value = blurId.value;
+      image.style.filter = `blur(${value}${dataSizing})`;
+     }, false);
+
+     colorId.addEventListener('input', function(e) {
+      let value = colorId.value;
+      image.style.borderColor = value;
+      jsHl.style.color = value;
+     }, false);
+
+
+  </script>
+
+</body>
+</html>

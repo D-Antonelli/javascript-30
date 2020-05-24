@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+const myRequest = new Request(endpoint);
+
+fetch(myRequest)
+    .then(response => response.json())
+        .then(data => {   
+
+          //get keyboard input
+          document.querySelector('.search').onkeyup = function() {
+          inputVal = this.value;
+          let searchResult = '';
+          let suggestions = document.querySelector('.suggestions');  
+          suggestions.innerHTML = '';  
+
+            for(let i=0; i<data.length; i++) {
+                    let regex = new RegExp(inputVal, "ig");
+                      if(data[i]['city'].search(regex) !== -1 || data[i]['state'].search(regex) !== -1) 
+                       {
+                
+                          let listItem = document.createElement('li');
+                          let html = listItem.innerHTML;
+                          html = `${data[i]['city']}, ${data[i]['state']}`;
+                          let replaced = `<span class="hl">${inputVal}</span>`;
+                          html = html.replace(regex, replaced);
+                          listItem.innerHTML = html + `<span class="population">${data[i]['population']}</span>`;
+                                                                                                 
+                          //append element    
+                          suggestions.append(listItem);                                                            
+                        } 
+                        
+          }
+          }
+        })
+
+</script>
+</body>
+</html>
+
+<!--text content vs inner text-->
