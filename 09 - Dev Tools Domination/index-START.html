@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular
+    console.log('Hello!');
+
+    // Interpolated
+    console.log('My name is %s', 'Jessy');
+    console.log('My %s wants a %s', 'dog', 'cracker');
+    console.log('My array is %O', dogs);
+
+    // Styled
+    console.log("This message is %cStylish", "color: yellow; background-color: blue; font-style: italic;")
+
+    // warning!
+    console.warn('Beware of this message!');
+
+    // Error :|
+    console.error('Error!!!');
+
+    // Info
+    console.info('Here is the info');
+
+    // Testing
+    const errorMsg = 'age is not 2';
+    dogs.forEach(dog => {
+      let age = dog.age;
+      console.log(dog.name+" is "+age+" years old.");
+      console.assert(age === 2, {age, errorMsg});
+    }); 
+
+
+    // clearing
+    console.clear();
+
+    // Viewing DOM Elements
+    console.dir(document.body);
+    console.log(document.body);
+
+    // Grouping together
+    console.clear();
+    console.log('Group will start soon');
+    dogs.forEach(dog => {
+      console.groupEnd();
+      console.group('name: ');
+      console.log(dog.name);
+      console.groupEnd();
+      console.group('age: ');
+      console.group(dog.age);
+      console.groupEnd();
+    });
+
+
+    // counting
+    console.clear();
+    for(let i=0; i<=5; i++) {
+      console.count();
+    }
+
+    // timing
+    console.clear();
+    console.time('count dogs');
+    
+    for(let i=0; i<dogs.length; i++) {
+      console.timeLog('count dogs');
+    }
+    console.timeEnd('count dogs');
+
+  </script>
+</body>
+</html>
