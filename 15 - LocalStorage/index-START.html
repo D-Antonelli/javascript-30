@@ -28,16 +28,10 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  let items = [];
-
-  //try this:
-  //https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API
+  const items = [];
 
 
-  if (items != []) {
-     items = JSON.parse(localStorage["items"]);
-  } 
-
+//SOLVE BUG: CHANGES IN CHECKBOX IS NOT REFRESHED IN LOCAL STORAGE
 
   //cred: MDN
   //submit handler
@@ -51,23 +45,35 @@
 
   //formdata handler to retrieve data
   addItems.addEventListener('formdata', e => {
-
     //get the form data from the event object
     let data = e.formData;
     for(var value of data.values()) {
       updateItemList(value);
       items.push(value);
-      localStorage["items"] = JSON.stringify(items);
       addItems.reset();
     }
+    items.forEach(item => {
+    let tapas = document.getElementById(item);
+    localStorage.setItem(item, tapas.checked);
+    //track changes if item is checked
+    tapas.addEventListener('change', function() {
+    localStorage.setItem(item, tapas.checked);
+  })
+ });
   });
 
+
+
   //LATER: feed items from items array
-  const updateItemList = item => {
+  const updateItemList = (item, isChecked=false) => {   
     //create children for new item
     let list = document.createElement("li");
     let input = document.createElement("input");
     input.type = "checkbox";
+    input.id= item;
+    if(isChecked==true) {
+      input.checked=true;
+    }
     let label = document.createElement("label");
     label.innerHTML = item;
     list.append(input);
@@ -79,13 +85,16 @@
   }
 
 
-function retrieveData() {
-    let storedItems = JSON.parse(localStorage["items"]) ;
-    storedItems.forEach(item => updateItemList(item));
-    //console.log(storedItems);  
-}  
-
-document.body.onload = retrieveData();  
+  function retrieveData() {
+     let keys = Object.keys(localStorage);
+     keys.forEach(key => 
+     {
+       let isChecked = (localStorage[key] == 'true');
+       updateItemList(key, isChecked);
+     });
+  }  
+  
+document.body.onload = retrieveData();
 
 </script>
 </body>
